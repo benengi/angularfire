@@ -1,0 +1,9 @@
+<h2>All Lessons</h2>
+
+<h4>Total Lessons: {{filteredLessons?.length}}</h4>
+
+<input type="text" class="search-bar" placeholder="Search" (keyup)="search(input.value)" #input>
+
+<div class="lessons-list-container v-h-center-block-parent">
+  <app-lessons-list [lessons]="filteredLessons"></app-lessons-list>
+</div>
