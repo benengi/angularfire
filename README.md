@@ -28,6 +28,6 @@ This is really meant as a reference as you go through the course. However you sh
 2. Install compatible version of angular cli globally as explained in the course (sudo npm install -g @angular/cli) 
 3. In the project directory, run "npm install"
 4. Set up src/environments/firebase.config.ts with your Firebase configuration as explained in the course
-5. Run "npm run populate-db" to populate your database if you have not already done so
+5. Run "npm run populate-db" to populate your database if you have not already done so. In my setup, once the database has been populated I have to hit Ctrl-C to exit the program for some reason.
 6. Run "ng serve" and the project should be running with Angular 6, RxJS 6. and AngularFire2 5.
  
