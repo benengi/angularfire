@@ -24,7 +24,6 @@ export class CourseDetailComponent implements OnInit {
     this.courseUrl = this.route.snapshot.params['id'];
     // Note: Firebase library has a client side cache and will not query the course twice
     this.course$ = this.coursesService.findCourseByUrl(this.courseUrl);
-    // this.lessons$ = this.coursesService.findAllLessonsForCourse(courseUrl);
     const lessons$ = this.coursesService.loadFirstLessonsPage(this.courseUrl, 3);
     lessons$.subscribe(lessons => this.lessons = lessons);
   }
