@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Lesson } from './lesson';
@@ -61,7 +61,13 @@ export class LessonsService {
     return this.firebaseUpdate(dataToSave);
   }
 
-  firebaseUpdate(dataToSave: any): Observable<void> {
+  saveLesson(lessonId: string, lesson: any): Observable<void> {
+    const lessonToSave = Object.assign({}, lesson);
+    delete(lessonToSave.$key);
+    return from(this.db.database.ref(`lessons/${lessonId}`).update(lessonToSave));
+  }
+
+  private firebaseUpdate(dataToSave: any): Observable<void> {
     // Note: could also import { from } from 'rxjs'
     // Then return from(this.db.database.ref().update(dataToSave));
     const subject = new Subject<void>();

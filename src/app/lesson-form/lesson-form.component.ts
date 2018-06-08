@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { validateUrl } from '../shared/validators/validate-url';
@@ -8,12 +8,13 @@ import { validateUrl } from '../shared/validators/validate-url';
   templateUrl: './lesson-form.component.html',
   styleUrls: ['./lesson-form.component.css']
 })
-export class LessonFormComponent implements OnInit {
+export class LessonFormComponent implements OnInit, OnChanges {
   form: FormGroup;
+  @Input() initialValue: any;
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder) {
+    // Initialize form here instead of ngOnInit() to make sure the form exists
+    // when ngOnChanges is called.
     this.form = this.fb.group({
       description: ['', Validators.required],
       url: ['', Validators.required],
@@ -21,6 +22,15 @@ export class LessonFormComponent implements OnInit {
       tags: ['', Validators.required],
       longDescription: [''],
     });
+  }
+
+  ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['initialValue']) {
+      this.form.patchValue(changes['initialValue'].currentValue);
+    }
   }
 
   isErrorVisible(field: string, error: string) {
