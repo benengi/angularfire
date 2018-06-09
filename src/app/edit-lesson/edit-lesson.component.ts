@@ -16,7 +16,6 @@ export class EditLessonComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.lesson = data['lesson'];
-      console.log(data);
     });
   }
 

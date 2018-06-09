@@ -1,0 +1,18 @@
+<form novalidate class="login-form" [formGroup]="form">
+  <fieldset>
+    <legend>Register</legend>
+    <div class="form-field">
+      <label>Email:</label>
+      <input type="text" name="email" formControlName="email">
+    </div>
+    <div class="form-field">
+      <label>Password:</label>
+      <input type="password" name="password" formControlName="password">
+    </div>
+    <div class="form-field">
+      <label>Confirm Password:</label>
+      <input type="password" name="confirm" formControlName="confirm">
+    </div>
+  </fieldset>
+  <button (click)="signUp()" [disabled]="!isPasswordMatch()">Create User</button>
+</form>
