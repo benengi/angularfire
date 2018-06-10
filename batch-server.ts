@@ -1,45 +1,32 @@
 
-import {firebaseConfig} from './src/environments/firebase.config';
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
-const Queue = require('firebase-queue');
-
+import {firebaseConfig, firebaseCredentials} from './src/environments/firebase.config';
+import { initializeApp, auth, database } from 'firebase';
+import * as Queue from 'firebase-queue';
 
 console.log('Running batch server ...');
 
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-firebase.auth()
-    .signInWithEmailAndPassword('admin@angular-university.io', 'test123')
+auth().signInWithEmailAndPassword(firebaseCredentials.username, firebaseCredentials.password)
     .then(runConsumer)
     .catch(onError);
 
 function onError(err) {
-    console.error('Could not login', err);
+    console.error('Could not login ', err);
     process.exit();
 }
 
-
 function runConsumer() {
+    const lessonsRef = database().ref('lessons');
+    const lessonsPerCourseRef = database().ref('lessonsPerCourse');
 
-    console.log('Running consumer ...');
-
-    const lessonsRef = firebase.database().ref('lessons');
-    const lessonsPerCourseRef = firebase.database().ref('lessonsPerCourse');
-
-    const queueRef = firebase.database().ref('queue');
-
+    const queueRef = database().ref('queue');
 
     const queue = new Queue(queueRef, function(data, progress, resolve, reject) {
-
         console.log('received delete request ...', data);
-
         const deleteLessonPromise = lessonsRef.child(data.lessonId).remove();
-
         const deleteLessonPerCoursePromise =
             lessonsPerCourseRef.child(`${data.courseId}/${data.lessonId}`).remove();
-
         Promise.all([deleteLessonPromise, deleteLessonPerCoursePromise])
             .then(
                 () => {
@@ -51,22 +38,5 @@ function runConsumer() {
             console.log('lesson deletion in error');
             reject();
         });
-
-
     });
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

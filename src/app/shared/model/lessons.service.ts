@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable, Subject, from } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
+import { firebaseConfig } from '../../../environments/firebase.config';
 import { Lesson } from './lesson';
 import { ServiceUtils } from './serviceUtils';
 
@@ -10,7 +12,7 @@ import { ServiceUtils } from './serviceUtils';
   providedIn: 'root'
 })
 export class LessonsService {
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase, private httpClient: HttpClient) {}
 
   findAllLessons(): Observable<Lesson[]> {
     return ServiceUtils.snapshotListToObjects(this.db.list('lessons'))
@@ -84,5 +86,19 @@ export class LessonsService {
       );
 
     return subject.asObservable();
+  }
+
+  deleteLesson(lessonId: string): Observable<Object> {
+    // In a real app we would use AngularFire, but this illustrates that REST is possible.
+    // Also in a real app we should delete the corresponding entry in lessonsPerCourse.
+    const url = `${firebaseConfig.databaseURL}/lessons/${lessonId}.json`;
+    return this.httpClient.delete(url);
+  }
+
+  requestLessonDeletion(lessonId: string, courseId: string) {
+    this.db.database.ref('queue/tasks').push({lessonId, courseId})
+      .then(
+        () => alert('lesson deletion requested !')
+      );
   }
 }

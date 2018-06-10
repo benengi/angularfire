@@ -44,4 +44,15 @@ export class LessonDetailComponent implements OnInit, OnDestroy {
   private navigateToLesson(lesson: Lesson) {
     this.router.navigate(['lessons', lesson.url]);
   }
+
+  delete() {
+    // Note: if we don't subscribe to the observable, nothing will happen and the data
+    // will not be deleted. Observables don't do anything without a subscriber.
+    this.lessonsService.deleteLesson(this.lesson.$key)
+      .subscribe(() => alert('Lesson deleted'), console.error);
+  }
+
+  requestLessonDeletion() {
+    this.lessonsService.requestLessonDeletion(this.lesson.$key, this.lesson.courseId);
+  }
 }

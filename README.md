@@ -8,6 +8,8 @@ It is a port of the [Angular 6 and Firebase](https://www.udemy.com/angular-fireb
 
 There is only one thing in this project specific to Angular 6. The services are now provided in the @Injectable annotation rather than in app.module. This is the recommended approach and the way the Angular CLI generates services. If you are using an older version of Angular this is easily fixed.
 
+Also, HttpModule is deprecated so I have used the HttpClientModule instead.
+
 ## RxJS notes
 
 This uses the RxJS 6.0 API without rxjs-compat. There are differences in the imports and API (particularly chaining of transforms) and this code will not work with older version of RxJS. Note that none of the subscriptions are ever cleaned up in the code. Since Firebase is a real-time database, the subscriptions are persistent and do not complete with the receipt of the first value. In a real application, all subscriptions should be saved as instance variables and unsubscribed in ngOnDestroy().
